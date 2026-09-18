@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="MediaHelm Privacy Policy and Terms and Conditions (EULA) for the Android app com.mediahelm.app. Last updated September 2026."
+      content="MediaHelm Privacy Policy and Terms and Conditions (EULA) for the Android app com.mediahelm.app. Last updated September 18, 2026."
     />
     <title>MediaHelm Legal — Privacy Policy and Terms</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -70,9 +70,11 @@
           package
           <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-800">com.mediahelm.app</code>.
         </p>
-        <p class="mt-2 text-sm text-slate-500">Last updated: September 2026</p>
+        <p class="mt-2 text-sm text-slate-500">Last updated: September 18, 2026</p>
         <p class="mt-4 text-sm leading-relaxed text-slate-600">
           This page describes how MediaHelm is designed to behave. It is not a substitute for independent legal advice.
+          MediaHelm is not directed at children; a parent or guardian is responsible for any use by minors (including
+          built-in demo channels that may be oriented toward kids’ programming).
         </p>
       </header>
 
@@ -89,6 +91,7 @@
             <a class="text-indigo-700 hover:underline" href="#privacy-on-device">What stays on your device</a>
             <a class="text-indigo-700 hover:underline" href="#privacy-permissions">Permissions</a>
             <a class="text-indigo-700 hover:underline" href="#privacy-third-parties">Third parties &amp; LAN</a>
+            <a class="text-indigo-700 hover:underline" href="#privacy-mediaproxy">MediaProxy &amp; headers</a>
             <a class="text-indigo-700 hover:underline" href="#privacy-contact">Contact</a>
           </nav>
 
@@ -122,11 +125,14 @@
                 storage). MediaHelm does not operate a SQLite or cloud database for your personal data.
               </p>
               <p class="mt-3">
-                Device discovery (mDNS/SSDP), the media sniffer, Shields/blocklists, and the media cache run on your
-                device and on your local area network (LAN). Casting uses that local network. For remote HLS, Chromecast
-                receives a phone <strong class="font-semibold text-slate-900">MediaProxy</strong> URL on the LAN (the
-                playlist is rewritten so variants and segments stay on that proxy). MediaHelm does not send that media
-                traffic to a MediaHelm cloud.
+                Device discovery (mDNS/SSDP), the Browser media sniffer (on-device inspection of media requests from
+                pages you open), Shields/blocklists, and the media cache run on your device and on your local area
+                network (LAN). Casting uses that local network. For remote HLS, Chromecast receives a phone
+                <strong class="font-semibold text-slate-900">MediaProxy</strong> URL on the LAN (the playlist is rewritten
+                so variants and segments stay on that proxy). MediaHelm does not send that media traffic to a MediaHelm
+                cloud. See
+                <a class="text-indigo-700 hover:underline" href="#privacy-mediaproxy">MediaProxy &amp; headers</a>
+                for how the phone serves media on the LAN.
               </p>
               <p class="mt-3">
                 <strong class="font-semibold text-slate-900">Network use is not the same as our collection.</strong>
@@ -248,18 +254,67 @@
               </p>
             </section>
 
+            <section id="privacy-mediaproxy" class="scroll-mt-24" aria-labelledby="privacy-mediaproxy-heading">
+              <h3 id="privacy-mediaproxy-heading" class="text-lg font-semibold text-slate-900">
+                MediaProxy &amp; headers
+              </h3>
+              <p class="mt-3">
+                When you cast (and for some local Files flows), your phone can act as a short-lived
+                <strong class="font-semibold text-slate-900">HTTP media server on your LAN</strong> (MediaProxy and/or a
+                local media server). The casting receiver fetches playlists and segments from your phone over the local
+                network. That hop is often <strong class="font-semibold text-slate-900">cleartext HTTP</strong> on the
+                LAN (receivers commonly expect HTTP for media), even when the original source was HTTPS.
+              </p>
+              <p class="mt-3">
+                On a shared or untrusted Wi‑Fi network, other devices on the same LAN may be able to observe or request
+                that local HTTP traffic while a cast session is active. Prefer a trusted private network when casting
+                sensitive streams. MediaHelm does not tunnel that LAN media hop through a MediaHelm cloud.
+              </p>
+              <p class="mt-3">
+                To play authenticated or site-restricted media, MediaHelm may forward an
+                <strong class="font-semibold text-slate-900">allowlisted</strong> set of HTTP headers needed for upstream
+                fetches and playback. In the current app, that allowlist includes
+                <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm">User-Agent</code>,
+                <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm">Referer</code> /
+                <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm">Referrer</code>,
+                <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm">Cookie</code> /
+                <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm">Cookie2</code>,
+                <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm">Origin</code>, and
+                <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm">Authorization</code> when present on sniffed or
+                supplied requests. Those values stay on-device for the session and may be sent to the origin CDN and/or
+                used when the receiver pulls media via the phone proxy — they are not uploaded to MediaHelm servers.
+                Diagnostic logs avoid printing Cookie or Authorization <em>values</em>.
+              </p>
+              <p class="mt-3">
+                The Browser sniffer inspects media-related network requests
+                <strong class="font-semibold text-slate-900">on your device</strong> (for example to surface HLS playlists)
+                so you can play or cast what you choose. It is not a MediaHelm cloud crawler and does not replace the
+                site’s own terms.
+              </p>
+            </section>
+
             <section id="privacy-contact" class="scroll-mt-24" aria-labelledby="privacy-contact-heading">
               <h3 id="privacy-contact-heading" class="text-lg font-semibold text-slate-900">Contact</h3>
               <p class="mt-3">
-                There is no public privacy inbox published for MediaHelm at this time. For questions about this policy,
-                or to raise a privacy-related request, you may open an issue on this public legal repository:
+                For privacy questions or requests about this policy, contact the publisher by email:
               </p>
               <p class="mt-3">
                 <a
                   class="font-medium text-indigo-700 underline decoration-indigo-200 underline-offset-2 hover:text-indigo-800"
-                  href="https://github.com/heribertolord96/mediahelm-legal"
+                  href="mailto:heribertolord@gmail.com"
                 >
-                  https://github.com/heribertolord96/mediahelm-legal
+                  heribertolord@gmail.com
+                </a>
+              </p>
+              <p class="mt-3">
+                You may also open an issue on this public legal repository (secondary channel):
+              </p>
+              <p class="mt-3">
+                <a
+                  class="font-medium text-indigo-700 underline decoration-indigo-200 underline-offset-2 hover:text-indigo-800"
+                  href="https://github.com/heribertolord96/mediahelm-legal/issues"
+                >
+                  https://github.com/heribertolord96/mediahelm-legal/issues
                 </a>
               </p>
               <p class="mt-3">
@@ -284,6 +339,7 @@
             <a class="text-indigo-700 hover:underline" href="#terms-license">License</a>
             <a class="text-indigo-700 hover:underline" href="#terms-byoc">Neutral tool / BYOC</a>
             <a class="text-indigo-700 hover:underline" href="#terms-acceptable-use">Acceptable use</a>
+            <a class="text-indigo-700 hover:underline" href="#terms-indemnity">Your responsibility &amp; indemnity</a>
             <a class="text-indigo-700 hover:underline" href="#terms-networks">Networks &amp; casting devices</a>
             <a class="text-indigo-700 hover:underline" href="#terms-disclaimer">Disclaimer of warranties</a>
             <a class="text-indigo-700 hover:underline" href="#terms-liability">Limitation of liability</a>
@@ -371,6 +427,27 @@
               </p>
             </section>
 
+            <section id="terms-indemnity" class="scroll-mt-24" aria-labelledby="terms-indemnity-heading">
+              <h3 id="terms-indemnity-heading" class="text-lg font-semibold text-slate-900">
+                Your responsibility &amp; indemnity
+              </h3>
+              <p class="mt-3">
+                MediaHelm does <strong class="font-semibold text-slate-900">not</strong> host, sell, or operate pirate
+                IPTV directories or third-party VOD libraries. Built-in TV entries are only a small set of legal public HLS
+                demos. User-supplied M3U playlists (URL or file), Browser-sniffed site media, cached Files content, and
+                anything you play or cast are supplied by you.
+              </p>
+              <p class="mt-3">
+                To the maximum extent permitted by applicable law, you agree to indemnify, defend, and hold harmless the
+                people who publish MediaHelm from and against claims, damages, losses, liabilities, costs, and expenses
+                (including reasonable attorneys’ fees) arising out of or related to: (a) user-supplied M3U/IPTV or other
+                playlists; (b) websites or streams you open or sniff in the Browser; (c) media you cache, play, or cast;
+                (d) your violation of these Terms or of third-party rights or terms; and (e) your network or device
+                configuration. This does not require you to indemnify for liability that mandatory law says cannot be
+                shifted to you.
+              </p>
+            </section>
+
             <section id="terms-networks" class="scroll-mt-24" aria-labelledby="terms-networks-heading">
               <h3 id="terms-networks-heading" class="text-lg font-semibold text-slate-900">
                 Networks &amp; casting devices
@@ -449,15 +526,25 @@
             <section id="terms-contact" class="scroll-mt-24" aria-labelledby="terms-contact-heading">
               <h3 id="terms-contact-heading" class="text-lg font-semibold text-slate-900">Contact</h3>
               <p class="mt-3">
-                There is no public operator email published with these Terms. You may open an issue on this public legal
-                repository:
+                For questions about these Terms, contact the publisher by email:
               </p>
               <p class="mt-3">
                 <a
                   class="font-medium text-indigo-700 underline decoration-indigo-200 underline-offset-2 hover:text-indigo-800"
-                  href="https://github.com/heribertolord96/mediahelm-legal"
+                  href="mailto:heribertolord@gmail.com"
                 >
-                  https://github.com/heribertolord96/mediahelm-legal
+                  heribertolord@gmail.com
+                </a>
+              </p>
+              <p class="mt-3">
+                You may also open an issue on this public legal repository (secondary channel):
+              </p>
+              <p class="mt-3">
+                <a
+                  class="font-medium text-indigo-700 underline decoration-indigo-200 underline-offset-2 hover:text-indigo-800"
+                  href="https://github.com/heribertolord96/mediahelm-legal/issues"
+                >
+                  https://github.com/heribertolord96/mediahelm-legal/issues
                 </a>
               </p>
             </section>
@@ -472,7 +559,7 @@
         <p class="mt-1">
           Package
           <code class="rounded bg-slate-100 px-1.5 py-0.5 text-slate-700">com.mediahelm.app</code>
-          · September 2026
+          · September 18, 2026
         </p>
         <p class="mt-3">
           <a class="text-indigo-700 hover:underline" href="#privacy">Privacy Policy</a>
